@@ -1,7 +1,16 @@
+- [x] Basic GUI wrapper
+- [x] Show/hide image panels options
+- [x] Squash bugs
+- [x] Good instructions for usage
 - [ ] Auto-scale images in viewer boxes to fit
+- [ ] Choose image-manipulation framework and structure
 - [ ] Hook backend functions into frontend (`renderPattern()`, `processImage()`)
+- [ ] Pick a few good example images to include
+- [ ] Add options to quick-load example images
 - [ ] Write backend function `processImage()`
 - [ ] Write backend function `renderPattern()`
-- [ ] Update frontend to change settings
+- [ ] Update frontend to enable changing settings
 - [ ] Auto-update preview images on setting change
 - [ ] Write CLI to handle args, flags, etc.
+- [ ] Usability study (haha who am I kidding)
+- [ ] Look into `pipx` for environment?
