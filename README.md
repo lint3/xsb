@@ -2,22 +2,14 @@
 
 ## Use It
 
-### Clone the repo
+### Get the code
 
 ```
 git clone git@github.com:lint3/xsb.git
 cd xsb
 ```
 
-### Make sure you're using Python3
-
-```
-python -V
-```
-
-If it says Python 2.*.*, you should fix that.
-
-### Create and activate a new virtual Python environment
+### Set up Python venv
 
 ```
 python -m venv venv
