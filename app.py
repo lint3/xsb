@@ -1,103 +1,87 @@
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import (QApplication, QWidget, QPushButton, QFileDialog, QGraphicsView,
-                             QGraphicsScene, QHBoxLayout, QVBoxLayout, QGridLayout)
+                             QGraphicsScene, QHBoxLayout, QVBoxLayout, QGridLayout,
+                             QGraphicsPixmapItem)
+from PyQt5.QtGui import QPixmap
 import sys
 from xstitch import *
 
-class ControlsUI(QWidget):
-  def __init__(self, parentContext):
-    super().__init__()
-    self.context = parentContext
-    self.UI()
     
-  def open(self):
-    self.path, _ = QFileDialog.getOpenFileName(self, "Pick Image", "", "Image Files (*.png *.jpg *.jpeg *.bmp")
-    if self.path:
-      self.context.fileOpened()
-    
-  def UI(self):
-    LoadFileButton = QPushButton('Load Image')
-    LoadFileButton.clicked.connect(self.open)
-    
-    RenderButton = QPushButton('Render')
-    RenderButton.clicked.connect(self.context.render)
-    
-    MyButton = QPushButton('Dejigamaflip')
-    vstack = QVBoxLayout()
-    
-    for item in [LoadFileButton, RenderButton, MyButton]:
-      vstack.addWidget(item)
-      
-    self.setLayout(vstack)
-    
-
-class PreviewUI(QWidget):
-  def __init__(self, parentContext):
-    super().__init__()
-    self.context = parentContext
-    self.UI()
-    
+class App(QWidget):
   
-  def UI(self):
-    vstack = QVBoxLayout()
-    testbutton = QPushButton("Test Button")
-    
-    s1 = QGraphicsScene()
-    s1.addText("Test1")
-    s2 = QGraphicsScene()
-    s2.addText("Test2")
-    s3 = QGraphicsScene()
-    s3.addText("Test3")
-    
-    self.inputImage = QGraphicsView(s1)
-    self.processedImage = QGraphicsView(s2)
-    self.outputImage = QGraphicsView(s3)
-    
-    for item in [self.inputImage, self.processedImage, self.outputImage]:
-      vstack.addWidget(item)
-      
-    self.setLayout(vstack)
-  
-class ParentUI(QWidget):
-  def __init__(self, parentContext):
-    super().__init__()
-    self.context = parentContext
-    self.UI()
-    
-  def UI(self):
-    controls = ControlsUI(self.context)
-    self.preview = PreviewUI(self.context)
-    
-    hsplit = QHBoxLayout()
-    hsplit.addWidget(controls)
-    hsplit.addWidget(self.preview)
-    
-    self.setLayout(hsplit)
-    self.setGeometry(1200, 200, 600, 600)
-    self.setWindowTitle('XSB')
-    self.show()
-
-class Context():
   def __init__(self):
+    super().__init__()
     self.timesRendered = 0
+    self.setup_ui()
+  
   
   def render(self):
     self.timesRendered += 1
     print("Rendered " + str(self.timesRendered) + " times.")
   
-  def fileOpened(self):
-    print("File opened.")
-    scene = QGraphicsScene(self.preview)
-    pixmap = QPixmap(self.preview.filepath)
-    pixItem = QGraphicsPixmapItem(pixmap)
-    self.preview.inputImage.addItem(pixItem)
-    self.render()
-
-
+  
+  def open(self):
+    self.path, _ = QFileDialog.getOpenFileName(self, "Pick Image", "", "Image Files (*.png *.jpg *.jpeg *.bmp")
+    if self.path:
+      print("File opened.")
+      scene = QGraphicsScene(self)
+      pixmap = QPixmap(self.path)
+      pixItem = QGraphicsPixmapItem(pixmap)
+      self.s1.addItem(pixItem)
+      self.render()
+  
+  
+  def setup_ui(self):
+    controls = QWidget()
+    controlsStack = QVBoxLayout()
+    controls.setLayout(controlsStack)
+    
+    LoadFileButton = QPushButton('Load Image')
+    LoadFileButton.clicked.connect(self.open)
+    
+    RenderButton = QPushButton('Render')
+    RenderButton.clicked.connect(self.render)
+    
+    MyButton = QPushButton('Dejigamaflip')
+    
+    
+    for item in [LoadFileButton, RenderButton, MyButton]:
+      controlsStack.addWidget(item)
+    
+    
+    preview = QWidget()
+    previewStack = QVBoxLayout()
+    preview.setLayout(previewStack)
+    
+    testbutton = QPushButton("Test Button")
+    
+    self.s1 = QGraphicsScene()
+    self.s1.addText("Test1")
+    self.s2 = QGraphicsScene()
+    self.s2.addText("Test2")
+    self.s3 = QGraphicsScene()
+    self.s3.addText("Test3")
+    
+    self.inputImage = QGraphicsView(self.s1)
+    self.processedImage = QGraphicsView(self.s2)
+    self.outputImage = QGraphicsView(self.s3)
+    
+    for item in [self.inputImage, self.processedImage, self.outputImage]:
+      previewStack.addWidget(item)
+    
+    
+    hsplit = QHBoxLayout()
+    hsplit.addWidget(controls)
+    hsplit.addWidget(preview)
+    
+    self.setLayout(hsplit)
+    self.setGeometry(1200, 200, 600, 600)
+    self.setWindowTitle('XSB')
+    self.show()
+  
   
 if __name__=="__main__":
-  appContext = Context()
   app = QApplication(sys.argv)
-  win = ParentUI(appContext)
+  win = App()
   win.show()
   app.exec()
