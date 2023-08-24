@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import (QApplication, QWidget, QPushButton, QFileDialog, QGraphicsView,
                              QGraphicsScene, QHBoxLayout, QVBoxLayout, QGridLayout,
-                             QGraphicsPixmapItem)
+                             QGraphicsPixmapItem, QCheckBox)
 from PyQt5.QtGui import QPixmap
 import sys
 from xstitch import *
@@ -30,6 +30,23 @@ class App(QWidget):
       self.s1.addItem(pixItem)
       self.render()
   
+  def toggleInputView(self):
+    if self.showInputBox.isChecked():
+      self.inputImage.show()
+    else:
+      self.inputImage.hide()
+  
+  def toggleProcessedView(self):
+    if self.showProcessedBox.isChecked():
+      self.processedImage.show()
+    else:
+      self.processedImage.hide()
+  
+  def toggleOutputView(self):
+    if self.showOutputBox.isChecked():
+      self.outputImage.show()
+    else:
+      self.outputImage.hide()
   
   def setup_ui(self):
     controls = QWidget()
@@ -42,10 +59,20 @@ class App(QWidget):
     RenderButton = QPushButton('Render')
     RenderButton.clicked.connect(self.render)
     
-    MyButton = QPushButton('Dejigamaflip')
+    self.showInputBox = QCheckBox("Show Input Image")
+    self.showInputBox.setChecked(True)
+    self.showInputBox.stateChanged.connect(self.toggleInputView)
+    self.showProcessedBox = QCheckBox("Show Processed Image")
+    self.showProcessedBox.setChecked(True)
+    self.showProcessedBox.stateChanged.connect(self.toggleProcessedView)
+    self.showOutputBox = QCheckBox("Show Output")
+    self.showOutputBox.setChecked(True)
+    self.showOutputBox.stateChanged.connect(self.toggleOutputView)
     
     
-    for item in [LoadFileButton, RenderButton, MyButton]:
+    
+    for item in [LoadFileButton, RenderButton, self.showInputBox,
+                 self.showProcessedBox, self.showOutputBox]:
       controlsStack.addWidget(item)
     
     
@@ -53,14 +80,13 @@ class App(QWidget):
     previewStack = QVBoxLayout()
     preview.setLayout(previewStack)
     
-    testbutton = QPushButton("Test Button")
     
     self.s1 = QGraphicsScene()
-    self.s1.addText("Test1")
+    self.s1.addText("Nothing Loaded")
     self.s2 = QGraphicsScene()
-    self.s2.addText("Test2")
+    self.s2.addText("Nothing Processed")
     self.s3 = QGraphicsScene()
-    self.s3.addText("Test3")
+    self.s3.addText("Nothing Processed")
     
     self.inputImage = QGraphicsView(self.s1)
     self.processedImage = QGraphicsView(self.s2)
