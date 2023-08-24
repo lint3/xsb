@@ -1,5 +1,7 @@
 # XSB - Cross Stitch Builder
 
+See [TODOs](TODO.md)
+
 ## Use It
 
 ### Get the code
