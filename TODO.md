@@ -1,0 +1,7 @@
+- [ ] Auto-scale images in viewer boxes to fit
+- [ ] Hook backend functions into frontend (`renderPattern()`, `processImage()`)
+- [ ] Write backend function `processImage()`
+- [ ] Write backend function `renderPattern()`
+- [ ] Update frontend to change settings
+- [ ] Auto-update preview images on setting change
+- [ ] Write CLI to handle args, flags, etc.
